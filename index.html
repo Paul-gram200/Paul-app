@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUST - Paul App v3.1</title>
+<meta name="theme-color" content="#3b82f6">
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--text:white;--border:#334155;--muted:#94a3b8}
+.light{--bg:#f1f5f9;--card:white;--text:#0f172a;--border:#e2e8f0;--muted:#64748b}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;transition:0.3s}
+.header{background:var(--card);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;border-bottom:1px solid var(--border)}
+.card-blue{background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:20px;padding:20px;margin:16px;color:white}
+.card{background:var(--card);border-radius:16px;padding:16px;margin:12px 16px;border:1px solid var(--border)}
+.btn{padding:10px 14px;border:none;border-radius:10px;font-weight:bold;color:white;cursor:pointer;font-size:13px}
+.btn-full{width:100%;margin-top:8px;padding:12px}
+.btn-blue{background:#3b82f6}.btn-purple{background:#8b5cf6}.btn-green{background:#22c55e}.btn-orange{background:#f59e0b}.btn-red{background:#ef4444}.btn-gold{background:#d4a017}
+.hidden{display:none}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);margin:8px 0}
+.nav{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px}
+.nav button{white-space:nowrap;padding:8px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-size:12px}
+.nav button.active{background:#3b82f6;color:white;border-color:#3b82f6}
+.logo-circle{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#1e40af,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:28px;border:3px solid #fbbf24}
+</style>
+</head>
+<body>
+<div id="loginScreen">
+<div style="padding:30px 20px;max-width:400px;margin:auto">
+<div style="text-align:center;margin-bottom:20px">
+<div style="display:flex;justify-content:center;margin-bottom:10px"><div class="logo-circle">🎓</div></div>
+<h1 style="font-size:26px">MUST</h1>
+<p style="color:var(--muted)">Mbeya University of Science & Technology</p>
+<span style="background:#22c55e;color:white;padding:4px 10px;border-radius:20px;font-size:11px">EST. 1962 • v3.1 Final - No Upload Needed</span>
+</div>
+<div class="card">
+<h3>Ingia</h3>
+<input id="regNo" placeholder="MUST/2024/001" value="MUST/2024/001">
+<input id="pass" type="password" placeholder="must123" value="must123">
+<button class="btn btn-blue btn-full" onclick="login()">Ingia →</button>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn" style="flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text)" onclick="toggleTheme()">🌙/☀️ Mode</button>
+<button class="btn btn-gold" style="flex:1" onclick="installApp()">📲 Install App</button>
+</div>
+</div>
+</div>
+</div>
+<div id="mainApp" class="hidden">
+<div class="header">
+<div style="display:flex;align-items:center;gap:10px">
+<div class="logo-circle" style="width:36px;height:36px;font-size:18px">🎓</div>
+<h3>MUST - Paul App</h3>
+</div>
+<div style="display:flex;gap:6px">
+<button class="btn" style="padding:6px 10px;background:var(--bg);border:1px solid var(--border)" onclick="toggleTheme()">🌙</button>
+<span style="background:#22c55e;color:white;padding:6px 10px;border-radius:20px;font-size:11px">Live v3.1</span>
+</div>
+</div>
+<div class="card-blue">
+<div style="display:flex;justify-content:space-between">
+<div><h2 id="welcomeName">Karibu Paul! 👋</h2><p id="regDisplay" style="font-size:13px">MUST/2024/001 - BSc CS</p></div>
+<div style="text-align:right"><p style="font-size:11px;opacity:0.8">GPA</p><p style="font-size:22px;font-weight:bold">4.2</p></div>
+</div>
+<div style="display:flex;gap:8px;margin-top:12px">
+<button class="btn" style="background:rgba(255,255,255,0.2);flex:1" onclick="shareResults()">📤 Share SMS</button>
+<button class="btn" style="background:rgba(255,255,255,0.2);flex:1" onclick="sendSMS()">💬 SMS Matokeo</button>
+</div>
+</div>
+<div class="nav">
+<button class="active" onclick="showTab('dash',this)">🏠 Dashboard</button>
+<button onclick="showTab('results',this)">📊 Matokeo</button>
+<button onclick="showTab('time',this)">📅 Timetable</button>
+<button onclick="showTab('fees',this)">💳 Fees</button>
+<button onclick="showTab('chat',this)">💬 Chat</button>
+</div>
+<div id="dash">
+<div class="card"><h3>📊 Matokeo</h3><p style="color:var(--muted)">GPA 4.2 - First Class</p><button class="btn btn-blue btn-full" onclick="showTab('results',null)">Fungua Matokeo</button></div>
+<div class="card"><h3>📅 Timetable</h3><p style="color:var(--muted)">3 Lectures leo - Next: DSA 10AM</p><button class="btn btn-purple btn-full" onclick="showTab('time',null)">Fungua Timetable</button></div>
+<div class="card"><h3>💳 Fees</h3><p style="color:#22c55e">Paid 100% - TZS 2.4M</p><button class="btn btn-green btn-full" onclick="showTab('fees',null)">Angalia Fees</button></div>
+</div>
+<div id="results" class="hidden"><div class="card"><div style="display:flex;justify-content:space-between"><h3>📊 Results</h3><button class="btn btn-gold" style="padding:6px 10px" onclick="shareResults()">📤 Share</button></div><p style="margin-top:10px">CS201 Data Structures: A<br>CS202 Algorithms: A<br>MT201 Maths: B+<br>CS203 Database: A</p><div style="margin-top:12px;padding:12px;background:var(--bg);border-radius:10px;display:flex;justify-content:space-between;border:1px solid var(--border)"><div><small style="color:var(--muted)">GPA</small><br><b style="color:#3b82f6;font-size:18px">4.2</b></div><div><small style="color:var(--muted)">Class</small><br><b style="color:#22c55e">First Class</b></div></div><button class="btn btn-blue btn-full" onclick="sendSMS()">💬 Tuma kwa SMS</button></div></div>
+<div id="time" class="hidden"><div class="card"><h3>📅 Leo Friday</h3><p>08:00 - Data Structures Room A12</p><p>10:30 - Database Lab 2</p><p>14:00 - Maths Room B05</p></div></div>
+<div id="fees" class="hidden"><div class="card"><h3>💳 Fees</h3><p>Total: TZS 2,400,000 Paid 100%</p><div style="background:#22c55e22;border:1px solid #22c55e;padding:10px;border-radius:8px;text-align:center;margin-top:10px">✅ No Balance</div></div></div>
+<div id="chat" class="hidden"><div class="card"><h3>💬 MUST Chat</h3><div style="height:200px;overflow-y:auto;background:var(--bg);border-radius:10px;padding:10px;margin:10px 0;border:1px solid var(--border)" id="chatBox"><div style="background:var(--card);padding:8px 12px;border-radius:12px;margin:6px 0;font-size:13px;border:1px solid var(--border)"><b>John:</b> Kesho test ya DSA?</div><div style="background:#3b82f6;padding:8px 12px;border-radius:12px;margin:6px 0 6px 20px;font-size:13px;color:white"><b>You:</b> Asante! 🔥</div></div><div style="display:flex;gap:8px"><input id="chatInput" placeholder="Andika..." style="margin:0"><button class="btn btn-blue" style="width:80px;margin:0" onclick="sendChat()">Tuma</button></div></div></div>
+<div style="text-align:center;padding:20px;color:var(--muted);font-size:11px"><button class="btn btn-red" style="width:200px" onclick="logout()">🚪 Logout</button><p style="margin-top:10px">Built by Paul Gram200 © 2025<br>📲 Installable • 🌙 Dark/Light • 💬 SMS - No Logo Upload Needed!</p></div>
+</div>
+<script>
+let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(c=>{if(c.outcome==='accepted')alert('✅ Installed!');deferredPrompt=null});}else alert('📲 Android: Bonyeza ⋮ > Add to Home screen / Install app');}
+function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme',document.body.classList.contains('light')?'light':'dark');}
+if(localStorage.getItem('theme')==='light')document.body.classList.add('light');
+function login(){const r=document.getElementById('regNo').value;if(!r){alert('Andika Reg No');return}document.getElementById('loginScreen').classList.add('hidden');document.getElementById('mainApp').classList.remove('hidden');document.getElementById('regDisplay').innerText=r+' - BSc CS';}
+function logout(){document.getElementById('mainApp').classList.add('hidden');document.getElementById('loginScreen').classList.remove('hidden');}
+function showTab(id,btn){['dash','results','time','fees','chat'].forEach(t=>document.getElementById(t).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(btn){document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}}
+function sendChat(){const i=document.getElementById('chatInput');if(!i.value)return;const b=document.getElementById('chatBox');const d=document.createElement('div');d.style.cssText='background:#3b82f6;padding:8px 12px;border-radius:12px;margin:6px 0 6px 20px;font-size:13px;color:white';d.innerHTML='<b>You:</b> '+i.value;b.appendChild(d);i.value='';b.scrollTop=b.scrollHeight;}
+function shareResults(){const t='MUST Results: MUST/2024/001 GPA 4.2 First Class - https://paul-gram200.github.io/Paul-app/';if(navigator.share){navigator.share({title:'MUST Results',text:t});}else{window.open('sms:?body='+encodeURIComponent(t));}}
+function sendSMS(){const t='MUST Matokeo: Reg MUST/2024/001 GPA 4.2 First Class. Soma: https://paul-gram200.github.io/Paul-app/';window.location.href='sms:?body='+encodeURIComponent(t);}
+</script>
+</body>
+</html>
