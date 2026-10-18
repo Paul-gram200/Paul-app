@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUST App</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3b82f6">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui;background:#0f172a;color:white;min-height:100vh;display:flex;flex-direction:column}
+.header{background:#1e40af;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
+.header h1{font-size:20px}
+.container{flex:1;padding:20px;max-width:500px;margin:0 auto;width:100%}
+.card{background:#1e293b;border-radius:15px;padding:20px;margin-bottom:15px;border:1px solid #334155}
+.btn{width:100%;padding:14px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;margin-top:10px}
+.btn:active{background:#2563eb}
+input{width:100%;padding:12px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:white;margin-top:8px;font-size:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{text-align:center;padding:15px}
+.stat h2{font-size:28px;color:#60a5fa}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#1e293b;display:flex;justify-content:space-around;padding:10px;border-top:1px solid #334155}
+.nav button{background:none;border:none;color:#94a3b8;font-size:12px}
+.nav button.active{color:#3b82f6}
+.hidden{display:none}
+.chat-item{padding:12px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:10px;cursor:pointer}
+.chat-item:active{background:#334155}
+</style>
+</head>
+<body>
+<div class="header"><h1>🎓 MUST - Mbeya University</h1></div>
+
+<div id="login" class="container">
+  <div class="card" style="margin-top:40px">
+    <h2 style="text-align:center;margin-bottom:20px">Karibu MUST App</h2>
+    <label>Jina la Mtumiaji</label>
+    <input id="user" placeholder="Andika jina lako">
+    <label style="margin-top:15px;display:block">Password</label>
+    <input id="pass" type="password" placeholder="••••••••">
+    <button class="btn" onclick="login()">INGIA</button>
+    <p style="text-align:center;margin-top:15px;color:#94a3b8;font-size:13px">App ya Wanafunzi MUST - Paul Gram</p>
+  </div>
+</div>
+
+<div id="home" class="container hidden">
+  <div class="card"><h3>👋 Habari, <span id="nameDisplay">Paul</span>!</h3><p style="color:#94a3b8;margin-top:5px">Mbeya University of Science and Technology</p></div>
+  <div class="grid">
+    <div class="card stat"><h2>3.8</h2><p>GPA</p></div>
+    <div class="card stat"><h2>6</h2><p>Masomo</p></div>
+  </div>
+  <div class="card"><h3>📚 Masomo Yangu</h3><p style="margin-top:10px">• Computer Science</p><p>• Database Systems</p><p>• Mobile Development</p><p>• Networking</p></div>
+  <div class="card"><h3>🔔 Taarifa</h3><p style="color:#94a3b8;margin-top:8px">Hakuna taarifa mpya leo.</p></div>
+  <div style="height:80px"></div>
+</div>
+
+<div id="chat" class="container hidden">
+  <div id="chatList">
+    <div class="card"><h3 style="margin-bottom:10px">💬 Chagua Mwanafunzi</h3>
+      <div class="chat-item" onclick="openChat('John Doe','CS')"><div style="width:40px;height:40px;background:#3b82f6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold">J</div><div><b>John Doe</b><p style="color:#94a3b8;font-size:12px">CS - Online • Assignment?</p></div></div>
+      <div class="chat-item" onclick="openChat('Grace Mushi','ICT')"><div style="width:40px;height:40px;background:#ec4899;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold">G</div><div><b>Grace Mushi</b><p style="color:#94a3b8;font-size:12px">ICT - Online • Notes zipo?</p></div></div>
+      <div class="chat-item" onclick="openChat('Neema Joseph','DB')"><div style="width:40px;height:40px;background:#10b981;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold">N</div><div><b>Neema Joseph</b><p style="color:#94a3b8;font-size:12px">Database - Offline • Kesho class?</p></div></div>
+      <div class="chat-item" onclick="openChat('Baraka Paul','Networks')"><div style="width:40px;height:40px;background:#f59e0b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold">B</div><div><b>Baraka Paul</b><p style="color:#94a3b8;font-size:12px">Networks - Online • Lab leo?</p></div></div>
+      <div class="chat-item" onclick="openChat('Asha Hamis','Mobile')"><div style="width:40px;height:40px;background:#8b5cf6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold">A</div><div><b>Asha Hamis</b><p style="color:#94a3b8;font-size:12px">Mobile Dev - Online • Project</p></div></div>
+    </div>
+  </div>
+  <div id="chatRoom" class="hidden">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><button onclick="backToList()" style="background:#334155;border:none;color:white;padding:6px 12px;border-radius:6px">←</button><b id="chatName">John</b><span id="chatStatus" style="color:#10b981;font-size:12px">• Online</span></div>
+      <div id="messages" style="min-height:300px;max-height:350px;overflow-y:auto">
+        <div style="background:#0f172a;padding:10px;border-radius:12px;margin-top:8px;max-width:80%">Habari! Mambo vipi assignment? 😊</div>
+        <div style="background:#3b82f6;padding:10px;border-radius:12px;margin-top:8px;margin-left:auto;max-width:80%;text-align:right">Poa, niko nayo! Niko library.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:15px"><input id="msgInput" placeholder="Andika ujumbe..." style="flex:1;margin-top:0"><button onclick="sendMsg()" style="background:#3b82f6;border:none;color:white;padding:12px 18px;border-radius:8px;font-weight:bold">Tuma</button></div>
+    </div>
+  </div>
+  <div style="height:80px"></div>
+</div>
+
+<div id="profile" class="container hidden">
+  <div class="card" style="text-align:center"><div style="width:80px;height:80px;background:#3b82f6;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:30px" id="profileLetter">P</div><h3 style="margin-top:15px" id="profileName">Paul Gram</h3><p style="color:#94a3b8">MUST - ICT</p><button class="btn" style="background:#ef4444;margin-top:20px" onclick="logout()">TOKA</button></div>
+  <div style="height:80px"></div>
+</div>
+
+<div id="nav" class="nav hidden">
+  <button class="active" id="btnHome" onclick="showPage('home')">🏠<br>Home</button>
+  <button id="btnChat" onclick="showPage('chat')">💬<br>Chat</button>
+  <button id="btnProfile" onclick="showPage('profile')">👤<br>Profile</button>
+</div>
+
+<script>
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+function login(){
+  const u=document.getElementById('user').value;
+  if(!u){alert('Andika jina!');return;}
+  document.getElementById('nameDisplay').innerText=u;
+  document.getElementById('profileName').innerText=u;
+  document.getElementById('profileLetter').innerText=u.charAt(0).toUpperCase();
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('home').classList.remove('hidden');
+  document.getElementById('nav').classList.remove('hidden');
+  localStorage.setItem('must_user',u);
+}
+function showPage(p){
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('profile').classList.add('hidden');
+  document.getElementById(p).classList.remove('hidden');
+  document.getElementById('btnHome').classList.remove('active');
+  document.getElementById('btnChat').classList.remove('active');
+  document.getElementById('btnProfile').classList.remove('active');
+  if(p==='home')document.getElementById('btnHome').classList.add('active');
+  if(p==='chat')document.getElementById('btnChat').classList.add('active');
+  if(p==='profile')document.getElementById('btnProfile').classList.add('active');
+}
+function logout(){
+  localStorage.removeItem('must_user');
+  document.getElementById('login').classList.remove('hidden');
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('profile').classList.add('hidden');
+  document.getElementById('nav').classList.add('hidden');
+}
+function openChat(name,course){
+  document.getElementById('chatList').classList.add('hidden');
+  document.getElementById('chatRoom').classList.remove('hidden');
+  document.getElementById('chatName').innerText=name;
+}
+function backToList(){
+  document.getElementById('chatList').classList.remove('hidden');
+  document.getElementById('chatRoom').classList.add('hidden');
+}
+function sendMsg(){
+  const inp=document.getElementById('msgInput');
+  if(!inp.value) return;
+  const div=document.createElement('div');
+  div.style.cssText='background:#3b82f6;padding:10px;border-radius:12px;margin-top:8px;margin-left:auto;max-width:80%;text-align:right';
+  div.innerText=inp.value;
+  document.getElementById('messages').appendChild(div);
+  inp.value='';
+  const msgs=document.getElementById('messages');
+  msgs.scrollTop=msgs.scrollHeight;
+  setTimeout(()=>{
+    const reply=document.createElement('div');
+    reply.style.cssText='background:#0f172a;padding:10px;border-radius:12px;margin-top:8px;max-width:80%';
+    const replies=['Sawa! 👍','Poa sana!','Asante!','Nimeelewa','Tuonane class!','Sawa bro!'];
+    reply.innerText=replies[Math.floor(Math.random()*replies.length)];
+    msgs.appendChild(reply);
+    msgs.scrollTop=msgs.scrollHeight;
+  },800);
+}
+const saved=localStorage.getItem('must_user');
+if(saved){document.getElementById('user').value=saved;login();}
+</script>
+</body>
+</html>
