@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUST App</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#3b82f6">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui;background:#0f172a;color:white;min-height:100vh;display:flex;flex-direction:column}
+.header{background:#1e40af;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
+.header h1{font-size:20px}
+.container{flex:1;padding:20px;max-width:500px;margin:0 auto;width:100%}
+.card{background:#1e293b;border-radius:15px;padding:20px;margin-bottom:15px;border:1px solid #334155}
+.btn{width:100%;padding:14px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;margin-top:10px}
+.btn:active{background:#2563eb}
+input{width:100%;padding:12px;border-radius:8px;border:1px solid #475569;background:#0f172a;color:white;margin-top:8px;font-size:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{text-align:center;padding:15px}
+.stat h2{font-size:28px;color:#60a5fa}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#1e293b;display:flex;justify-content:space-around;padding:10px;border-top:1px solid #334155}
+.nav button{background:none;border:none;color:#94a3b8;font-size:12px}
+.nav button.active{color:#3b82f6}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="header"><h1>🎓 MUST - Mbeya University</h1></div>
+
+<div id="login" class="container">
+  <div class="card" style="margin-top:40px">
+    <h2 style="text-align:center;margin-bottom:20px">Karibu MUST App</h2>
+    <label>Jina la Mtumiaji</label>
+    <input id="user" placeholder="Andika jina lako">
+    <label style="margin-top:15px;display:block">Password</label>
+    <input id="pass" type="password" placeholder="••••••••">
+    <button class="btn" onclick="login()">INGIA</button>
+    <p style="text-align:center;margin-top:15px;color:#94a3b8;font-size:13px">App ya Wanafunzi MUST - Paul Gram</p>
+  </div>
+</div>
+
+<div id="home" class="container hidden">
+  <div class="card"><h3>👋 Habari, <span id="nameDisplay">Paul</span>!</h3><p style="color:#94a3b8;margin-top:5px">Mbeya University of Science and Technology</p></div>
+  <div class="grid">
+    <div class="card stat"><h2>3.8</h2><p>GPA</p></div>
+    <div class="card stat"><h2>6</h2><p>Masomo</p></div>
+  </div>
+  <div class="card"><h3>📚 Masomo Yangu</h3><p style="margin-top:10px">• Computer Science</p><p>• Database Systems</p><p>• Mobile Development</p><p>• Networking</p></div>
+  <div class="card"><h3>🔔 Taarifa</h3><p style="color:#94a3b8;margin-top:8px">Hakuna taarifa mpya leo.</p></div>
+  <div style="height:80px"></div>
+</div>
+
+<div id="nav" class="nav hidden">
+  <button class="active" onclick="showPage('home')">🏠<br>Home</button>
+  <button onclick="showPage('chat')">💬<br>Chat</button>
+  <button onclick="showPage('profile')">👤<br>Profile</button>
+</div>
+
+<div id="chat" class="container hidden">
+  <div class="card"><h3>💬 Chat ya Wanafunzi</h3><p style="color:#94a3b8;margin-top:10px">Karibu kwenye chat!</p><div style="margin-top:15px;background:#0f172a;padding:10px;border-radius:8px">John: Mambo vipi assignment?</div><div style="margin-top:10px;background:#3b82f6;padding:10px;border-radius:8px;margin-left:20px">Wewe: Poa, niko nayo!</div></div>
+  <div style="height:80px"></div>
+</div>
+
+<div id="profile" class="container hidden">
+  <div class="card" style="text-align:center"><div style="width:80px;height:80px;background:#3b82f6;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:30px">P</div><h3 style="margin-top:15px">Paul Gram</h3><p style="color:#94a3b8">MUST - ICT</p><button class="btn" style="background:#ef4444;margin-top:20px" onclick="logout()">TOKA</button></div>
+  <div style="height:80px"></div>
+</div>
+
+<script>
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+function login(){
+  const u=document.getElementById('user').value;
+  if(!u){alert('Andika jina!');return;}
+  document.getElementById('nameDisplay').innerText=u;
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('home').classList.remove('hidden');
+  document.getElementById('nav').classList.remove('hidden');
+  localStorage.setItem('must_user',u);
+}
+function showPage(p){
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('profile').classList.add('hidden');
+  document.getElementById(p).classList.remove('hidden');
+}
+function logout(){
+  localStorage.removeItem('must_user');
+  document.getElementById('login').classList.remove('hidden');
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('chat').classList.add('hidden');
+  document.getElementById('profile').classList.add('hidden');
+  document.getElementById('nav').classList.add('hidden');
+}
+const saved=localStorage.getItem('must_user');
+if(saved){document.getElementById('user').value=saved;login();}
+</script>
+</body>
+</html>
