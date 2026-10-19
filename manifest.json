@@ -1,0 +1,24 @@
+{
+  "name": "MUST 92KG - PAUL OFFICIAL",
+  "short_name": "MUST 92KG",
+  "description": "Gym App ya MUST - Paul 92KG",
+  "start_url": "/Paul-app/",
+  "scope": "/Paul-app/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#FFD700",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2622/2622159.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2622/2622159.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
