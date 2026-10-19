@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUST 92KG - PAUL</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+body{background:#000;color:#fff}
+.header{background:#FFD700;color:#000;padding:15px;font-weight:900;text-align:center;font-size:18px;position:sticky;top:0;z-index:10}
+.container{max-width:500px;margin:auto;padding:15px}
+.post-box{background:#111;border:1px solid #222;border-radius:15px;padding:15px;margin-bottom:20px}
+textarea{width:100%;background:#000;color:#fff;border:1px solid #333;border-radius:10px;padding:12px;min-height:80px;font-size:15px;outline:none}
+.btn{background:#FFD700;color:#000;border:none;width:100%;padding:14px;border-radius:10px;font-weight:900;font-size:16px;margin-top:10px;cursor:pointer}
+.status{text-align:center;color:#FFD700;font-size:13px;margin:10px 0;height:20px}
+.feed-item{background:#111;border:1px solid #222;border-radius:15px;padding:15px;margin-bottom:12px}
+.feed-name{color:#FFD700;font-weight:800;font-size:14px;margin-bottom:6px}
+.feed-text{font-size:15px;line-height:1.4;white-space:pre-wrap}
+.feed-time{font-size:11px;color:#666;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="header">MUST 92KG - PAUL 💪</div>
+<div class="container">
+<div class="post-box">
+<textarea id="postInput" placeholder="Leo umefanya nini gym? Eg: Legs Day 100kg x 10..."></textarea>
+<button class="btn" id="tumaBtn" onclick="tumaPost()">TUMA FIREBASE 🔥</button>
+<div class="status" id="status"></div>
+</div>
+<div id="feed"></div>
+</div>
+
+<script>
+const DB_URL = "https://must-app-paul-default-rtdb.firebaseio.com/posts.json";
+
+async function loadPosts(){
+  const feed = document.getElementById('feed');
+  try{
+    const res = await fetch(DB_URL);
+    const data = await res.json();
+    feed.innerHTML="";
+    if(!data){ feed.innerHTML="<p style='text-align:center;color:#555;margin-top:20px;'>Hakuna post bado. Anza ku-post!</p>"; return; }
+    const posts = Object.values(data).sort((a,b)=>b.time - a.time);
+    posts.forEach(p=>{
+      const jina = p.name || "Paul 92KG";
+      const ujumbe = p.text || "";
+      const d = new Date(p.time);
+      const div = document.createElement('div');
+      div.className="feed-item";
+      div.innerHTML=`<div class="feed-name">${jina}</div><div class="feed-text">${ujumbe}</div><div class="feed-time">${d.toLocaleString()}</div>`;
+      feed.appendChild(div);
+    });
+  }catch(e){
+    feed.innerHTML="<p style='text-align:center;color:red;'>Error kupakia: "+e.message+"</p>";
+  }
+}
+
+async function tumaPost(){
+  const input = document.getElementById('postInput');
+  const text = input.value.trim();
+  const st = document.getElementById('status');
+  const btn = document.getElementById('tumaBtn');
+  if(!text){ st.innerText="Andika kitu kwanza!"; return; }
+  btn.disabled=true;
+  st.innerText="Inatuma...";
+  try{
+    const res = await fetch(DB_URL, {
+      method: "POST",
+      body: JSON.stringify({ name:"Paul 92KG", text:text, time:Date.now() }),
+      headers: {"Content-Type":"application/json"}
+    });
+    if(res.ok){
+      input.value="";
+      st.innerText="✅ Imehifadhiwa! Imeenda LIVE!";
+      loadPosts();
+      setTimeout(()=>st.innerText="",2000);
+    }else{ throw new Error("Firebase imekataa"); }
+  }catch(e){
+    st.innerText="❌ Error: "+e.message;
+  }
+  btn.disabled=false;
+}
+loadPosts();
+setInterval(loadPosts, 5000);
+</script>
+</body>
+</html>
