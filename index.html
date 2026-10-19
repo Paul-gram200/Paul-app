@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUST 92KG - PAUL</title>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family: -apple-system, BlinkMacSystemFont, sans-serif;}
+body{background:#000;color:#fff;}
+.header{background:#FFD700;color:#000;padding:15px;font-weight:900;text-align:center;font-size:18px;position:sticky;top:0;z-index:10;}
+.container{max-width:500px;margin:auto;padding:15px;}
+.post-box{background:#111;border:1px solid #222;border-radius:15px;padding:15px;margin-bottom:20px;}
+textarea{width:100%;background:#000;color:#fff;border:1px solid #333;border-radius:10px;padding:12px;min-height:80px;font-size:15px;outline:none;}
+.btn{background:#FFD700;color:#000;border:none;width:100%;padding:14px;border-radius:10px;font-weight:900;font-size:16px;margin-top:10px;cursor:pointer;}
+.btn:active{transform:scale(0.98);}
+.feed-item{background:#111;border:1px solid #222;border-radius:15px;padding:15px;margin-bottom:12px;}
+.feed-name{color:#FFD700;font-weight:800;font-size:14px;margin-bottom:6px;}
+.feed-text{font-size:15px;line-height:1.4;}
+.feed-time{font-size:11px;color:#666;margin-top:8px;}
+.status{text-align:center;color:#FFD700;font-size:13px;margin:10px 0;height:20px;}
+</style>
+</head>
+<body>
+<div class="header">MUST 92KG - PAUL 💪</div>
+<div class="container">
+<div class="post-box">
+<textarea id="postInput" placeholder="Leo umefanya nini gym? Eg: Legs Day 100kg x 10..."></textarea>
+<button class="btn" onclick="tumaPost()">TUMA FIREBASE 🔥</button>
+<div class="status" id="status"></div>
+</div>
+<div id="feed"><p style="text-align:center;color:#555;margin-top:30px;">Inapakia posts zako...</p></div>
+</div>
+
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyB7-8bXyXyXyXyXyXyXyXyXy",
+  authDomain: "must-app-paul.firebaseapp.com",
+  databaseURL: "https://must-app-paul-default-rtdb.firebaseio.com",
+  projectId: "must-app-paul",
+  storageBucket: "must-app-paul.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};
+// Config yako halisi itafanya kazi bila apiKey kamili kwa Realtime DB
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+
+function tumaPost(){
+  var text = document.getElementById('postInput').value.trim();
+  var st = document.getElementById('status');
+  if(!text){ st.innerText="Andika kitu kwanza!"; return; }
+  st.innerText="Inatuma...";
+  db.ref('posts').push({
+    name: "Paul 92KG",
+    text: text,
+    time: Date.now()
+  }).then(()=>{
+    document.getElementById('postInput').value="";
+    st.innerText="✅ Imehifadhiwa! Imeenda LIVE!";
+    setTimeout(()=>st.innerText="",2000);
+  }).catch(e=>{
+    st.innerText="❌ Error: "+e.message;
+  });
+}
+
+db.ref('posts').orderByChild('time').on('value', snap=>{
+  var feed = document.getElementById('feed');
+  feed.innerHTML="";
+  var data = snap.val();
+  if(!data){ feed.innerHTML="<p style='text-align:center;color:#555;'>Hakuna post bado. Anza ku-post!</p>"; return; }
+  var posts = Object.values(data).reverse();
+  posts.forEach(p=>{
+    var d = new Date(p.time);
+    var div = document.createElement('div');
+    div.className="feed-item";
+    div.innerHTML=`<div class="feed-name">${p.name}</div><div class="feed-text">${p.text}</div><div class="feed-time">${d.toLocaleString()}</div>`;
+    feed.appendChild(div);
+  });
+});
+</script>
+</body>
+</html>
