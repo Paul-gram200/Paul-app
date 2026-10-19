@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="sw" class="notranslate" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
+<meta name="theme-color" content="#FFD700">
+<title>MUST 92KG - PAUL OFFICIAL</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTVVTVCA5MktHIC0gUEFVTCIsInNob3J0X25hbWUiOiI5MktHIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJ0aGVtZV9jb2xvciI6IiNGRkQ3MDAiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzAwMDAwMCJ9">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+body{background:#000;color:#fff;-webkit-font-smoothing:antialiased}
+.notranslate{translate:no}
+.header{background:#0a0a0a;border-bottom:2px solid #FFD700;padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:30}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-circle{width:42px;height:42px;background:#FFD700;color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;border:2px solid #fff}
+.logo-text{font-weight:900;letter-spacing:0.5px}
+.verified{width:18px;height:18px;background:#1DA1F2;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px;margin-left:4px}
+.container{max-width:500px;margin:auto;padding:15px}
+.profile-card{background:linear-gradient(135deg,#111,#1a1a1a);border:1px solid #333;border-radius:20px;padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:18px}
+.profile-pic{width:60px;height:60px;background:#FFD700;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:20px;border:2px solid #FFD700}
+.post-box{background:#111;border:1px solid #333;border-radius:15px;padding:15px;margin-bottom:20px}
+textarea{width:100%;background:#000;color:#fff;border:1px solid #333;border-radius:10px;padding:12px;min-height:70px;font-size:15px;outline:none}
+.btn{background:#FFD700;color:#000;border:none;width:100%;padding:14px;border-radius:10px;font-weight:900;font-size:16px;margin-top:10px;cursor:pointer}
+.btn:active{transform:scale(0.98)}
+.file-label{color:#FFD700;font-size:13px;margin-top:8px;display:inline-block;cursor:pointer;border:1px dashed #555;padding:6px 10px;border-radius:8px}
+.preview{width:100%;border-radius:12px;margin-top:10px;display:none;max-height:300px;object-fit:cover}
+.feed-item{background:#111;border:1px solid #222;border-radius:15px;padding:15px;margin-bottom:14px}
+.feed-top{display:flex;justify-content:space-between;align-items:center}
+.feed-name{color:#FFD700;font-weight:800;font-size:14px;display:flex;align-items:center}
+.feed-text{font-size:15px;margin:10px 0;line-height:1.4;white-space:pre-wrap}
+.feed-img{width:100%;border-radius:12px;margin-top:10px;max-height:450px;object-fit:cover}
+.feed-time{font-size:11px;color:#666;margin-top:6px}
+.btn2{background:#1e1e1e;color:#fff;border:1px solid #333;padding:7px 12px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;margin-right:8px}
+.btn2.liked{background:#FFD700;color:#000;border-color:#FFD700}
+.status{text-align:center;color:#FFD700;font-size:13px;margin:8px 0;height:18px}
+.install-banner{background:#FFD700;color:#000;padding:10px;text-align:center;font-weight:800;font-size:13px;display:none;cursor:pointer;border-radius:10px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <div class="logo-circle">92KG</div>
+    <div class="logo-text">MUST 92KG <span class="verified">✓</span></div>
+  </div>
+  <div style="font-size:12px;color:#FFD700;font-weight:700">OFFICIAL</div>
+</div>
+
+<div class="container">
+<div class="install-banner" id="installBanner" onclick="installApp()">📲 Sakinisha App kwenye simu yako - Bonyeza hapa!</div>
+
+<div class="profile-card">
+  <div class="profile-pic">P</div>
+  <div>
+    <div style="font-weight:900;display:flex;align-items:center">Paul 92KG <span class="verified" style="margin-left:6px">✓</span></div>
+    <div style="font-size:12px;color:#aaa;margin-top:2px">MUST • Legs Day Specialist • 92KG</div>
+    <div style="font-size:11px;color:#FFD700;margin-top:4px">🔥 12 Posts • 💪 Verified Athlete</div>
+  </div>
+</div>
+
+<div class="post-box">
+<textarea id="postInput" placeholder="Leo Legs Day? Squat ngapi?"></textarea>
+<label class="file-label">📸 Chagua Picha <input type="file" id="imgInput" accept="image/*" hidden onchange="previewImg(event)"></label>
+<img id="preview" class="preview">
+<button class="btn" id="tumaBtn" onclick="tumaPost()">TUMA POST 🔥</button>
+<div class="status" id="status"></div>
+</div>
+
+<div id="feed"></div>
+</div>
+
+<script>
+const DB_URL = "https://must-app-paul-default-rtdb.firebaseio.com/posts.json";
+let selectedBase64 = "";
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault(); deferredPrompt=e; document.getElementById('installBanner').style.display='block';
+});
+function installApp(){
+  if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{deferredPrompt=null; document.getElementById('installBanner').style.display='none';}); }
+}
+
+function previewImg(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 800000){ alert("Picha kubwa sana! Chagua chini ya 800KB"); return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    selectedBase64 = reader.result;
+    const p = document.getElementById('preview');
+    p.src = selectedBase64; p.style.display="block";
+  };
+  reader.readAsDataURL(file);
+}
+
+async function loadPosts(){
+  const feed = document.getElementById('feed');
+  try{
+    const res = await fetch(DB_URL);
+    const data = await res.json();
+    feed.innerHTML="";
+    if(!data){ feed.innerHTML="<p style='text-align:center;color:#555;margin-top:20px;'>Hakuna post. Anza sasa!</p>"; return; }
+    const entries = Object.entries(data).sort((a,b)=>b[1].time - a[1].time);
+    entries.forEach(([key, p])=>{
+      const d = new Date(p.time);
+      const liked = localStorage.getItem('liked_'+key) ? 'liked' : '';
+      const div = document.createElement('div');
+      div.className="feed-item";
+      div.innerHTML=`
+        <div class="feed-top">
+          <div class="feed-name">Paul 92KG <span class="verified">✓</span></div>
+          <div style="font-size:10px;color:#666">${d.toLocaleDateString()}</div>
+        </div>
+        <div class="feed-text">${(p.text||"")}</div>
+        ${p.image ? `<img src="${p.image}" class="feed-img" loading="lazy">` : ""}
+        <div class="feed-time">${d.toLocaleString()} • ${p.likes||0} likes</div>
+        <div style="margin-top:10px">
+          <button class="btn2 ${liked}" onclick="likePost('${key}', ${p.likes||0}, this)">❤️ Like (${p.likes||0})</button>
+          <button class="btn2">💬 Comment</button>
+          <button class="btn2">↗️ Share</button>
+        </div>
+      `;
+      feed.appendChild(div);
+    });
+  }catch(e){ feed.innerHTML="<p style='color:red;text-align:center'>Error: "+e.message+"</p>"; }
+}
+
+async function tumaPost(){
+  const input = document.getElementById('postInput');
+  const text = input.value.trim();
+  const st = document.getElementById('status');
+  const btn = document.getElementById('tumaBtn');
+  if(!text && !selectedBase64){ st.innerText="Andika au chagua picha!"; return; }
+  btn.disabled=true; st.innerText="Inatuma...";
+  try{
+    await fetch(DB_URL, {
+      method:"POST",
+      body: JSON.stringify({ name:"Paul 92KG", text:text, image:selectedBase64, likes:0, time:Date.now() }),
+      headers:{"Content-Type":"application/json"}
+    });
+    input.value=""; selectedBase64=""; document.getElementById('preview').style.display="none"; document.getElementById('imgInput').value="";
+    st.innerText="✅ ULTIMATE POST IMEHIFADHIWA!"; loadPosts();
+    setTimeout(()=>st.innerText="",2000);
+  }catch(e){ st.innerText="❌ "+e.message; }
+  btn.disabled=false;
+}
+
+async function likePost(key, currentLikes, btnEl){
+  if(localStorage.getItem('liked_'+key)){ alert("Umeshalike!"); return; }
+  const url = `https://must-app-paul-default-rtdb.firebaseio.com/posts/${key}.json`;
+  btnEl.innerText=`❤️ Like (${currentLikes+1})`; btnEl.classList.add('liked');
+  localStorage.setItem('liked_'+key,'1');
+  await fetch(url, { method:"PATCH", body:JSON.stringify({likes: currentLikes+1}), headers:{"Content-Type":"application/json"} });
+  loadPosts();
+}
+
+loadPosts();
+setInterval(loadPosts, 10000);
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('data:text/javascript;base64,'+btoa("self.addEventListener('fetch',e=>{})")); }
+</script>
+</body>
+</html>
