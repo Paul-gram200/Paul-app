@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUST 92KG V7 LITE - FREE</title>
+<link rel="manifest" href="./manifest.json">
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyADZCCp8b71lXNBdx_pFCu5XORzRIvMNfQ",
+  authDomain: "must-app-paul.firebaseapp.com",
+  databaseURL: "https://must-app-paul-default-rtdb.firebaseio.com",
+  projectId: "must-app-paul",
+  storageBucket: "must-app-paul.firebasestorage.app",
+  messagingSenderId: "4726489208",
+  appId: "1:4726489208:web:323c852459292ef2872d8d"
+};
+firebase.initializeApp(firebaseConfig);
+const dbCloud = firebase.firestore();
+const dbRealtime = firebase.database();
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+body{background:#0f0f0f;color:#fff;padding:10px;max-width:600px;margin:0 auto}
+h1{text-align:center;padding:12px;background:linear-gradient(90deg,#ff6a00,#ee0979);border-radius:12px;margin-bottom:10px;font-size:15px}
+.card{background:#1e1e1e;border-radius:12px;padding:12px;margin:10px 0;border:1px solid #333}
+input,textarea{width:100%;background:#111;color:#fff;border:1px solid #444;border-radius:8px;padding:10px;margin:6px 0}
+.btn{width:100%;padding:12px;background:#ff6a00;border:none;border-radius:10px;color:#fff;font-weight:bold}
+.btn:disabled{background:#555}
+.fbtn{padding:6px 12px;border-radius:20px;border:1px solid #555;background:#222;color:#fff;margin:2px}
+.fbtn.active{background:#ff6a00}
+.post-img{width:100%;border-radius:10px;margin-top:8px;max-height:600px;object-fit:contain;background:#000}
+.meta{font-size:11px;color:#aaa;margin-top:6px;display:flex;justify-content:space-between}
+.actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.abtn{padding:6px 10px;border-radius:8px;border:1px solid #444;background:#222;color:#fff;font-size:12px}
+.status{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#000;color:#0f0;padding:10px 20px;border-radius:30px;border:1px solid #0f0;display:none;z-index:999;max-width:90%;font-size:12px}
+</style>
+</head>
+<body>
+<h1>🏗️ MUST 92KG V7 LITE - FREE ☁️</h1>
+<div class="card" style="border:1px solid #00c853">
+<button class="btn" id="installBtn" style="display:none;background:#00c853" onclick="installApp()">📥 DOWNLOAD APP - INSTALL</button>
+<div style="font-size:11px;text-align:center;margin-top:6px;color:#aaa">Picha 1000+ | Video 0:05-0:10 | 100% FREE</div>
+</div>
+<div class="card">
+<textarea id="postText" rows="3" placeholder="RAMANI ZA NYUMBA ZA KISASA, SCALE 1CM=1M..."></textarea>
+<input type="file" id="fileInput" accept="image/*,video/*">
+<div id="preview" style="font-size:11px;color:#0f0;margin-top:4px"></div>
+<button class="btn" id="postBtn" onclick="createPost()">📤 Tuma Post</button>
+</div>
+<div class="card">
+<div style="display:flex;gap:6px">
+<input id="searchInput" placeholder="🔍 Tafuta: Kisasa..." oninput="renderPosts()" style="flex:1">
+<button class="fbtn" onclick="loadFromCloud()">☁️ Cloud</button>
+</div>
+<div style="display:flex;gap:6px;overflow:auto;margin-top:6px">
+<button class="fbtn active" onclick="setFilter('all',this)">Zote</button>
+<button class="fbtn" onclick="setFilter('kisasa',this)">Kisasa</button>
+<button class="fbtn" onclick="setFilter('scale',this)">SCALE</button>
+<button class="fbtn" onclick="setFilter('ramani',this)">Ramani</button>
+</div>
+</div>
+<div id="postsContainer"></div>
+<div id="status" class="status"></div>
+
+<script>
+let posts=[], selectedFile=null, selectedData=null, selectedType=null, currentFilter='all', db, deferredPrompt=null;
+
+window.addEventListener('beforeinstallprompt', (e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='block';});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();}else{showStatus("Bonyeza ⋮ -> Install App / Add to Home Screen");}}
+
+function dbOpen(){return new Promise((res,rej)=>{let r=indexedDB.open("Must92KG_V7LITE",3);r.onupgradeneeded=e=>{let d=e.target.result;if(!d.objectStoreNames.contains("posts")) d.createObjectStore("posts",{keyPath:"id"})};r.onsuccess=e=>{db=e.target.result;res()};r.onerror=rej})}
+function dbSave(p){return new Promise(r=>{let tx=db.transaction("posts","readwrite");tx.objectStore("posts").put(p);tx.oncomplete=()=>r()})}
+function dbDel(id){return new Promise(r=>{let tx=db.transaction("posts","readwrite");tx.objectStore("posts").delete(id);tx.oncomplete=()=>r()})}
+function dbLoad(){return new Promise(r=>{let tx=db.transaction("posts","readonly");let req=tx.objectStore("posts").getAll();req.onsuccess=()=>r(req.result||[])})}
+
+// COMPRESS IMAGE TO <700KB
+function compressImage(file){
+  return new Promise((resolve)=>{
+    let reader=new FileReader();
+    reader.onload=e=>{
+      let img=new Image();
+      img.onload=()=>{
+        let canvas=document.createElement('canvas');
+        let maxW=1280;
+        let scale=Math.min(1, maxW/img.width);
+        canvas.width=img.width*scale; canvas.height=img.height*scale;
+        let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        let quality=0.7;
+        let dataUrl=canvas.toDataURL('image/jpeg',quality);
+        while(dataUrl.length>700000 && quality>0.3){
+          quality-=0.1; dataUrl=canvas.toDataURL('image/jpeg',quality);
+        }
+        resolve(dataUrl);
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById('fileInput').addEventListener('change', async e=>{
+  selectedFile=e.target.files[0]; if(!selectedFile) return;
+  selectedType=selectedFile.type.startsWith('video')?'video':'image';
+  let prev=document.getElementById('preview');
+  prev.textContent=`⏳ Inapanga ${(selectedFile.size/1024/1024).toFixed(2)}MB...`;
+  if(selectedType==='image'){
+    selectedData=await compressImage(selectedFile);
+    prev.textContent=`✅ Picha imepunguzwa: ${(selectedData.length/1024).toFixed(0)}KB - Tayari kupost!`;
+  } else {
+    if(selectedFile.size>3000000){ prev.textContent=`❌ Video kubwa sana! ${(selectedFile.size/1024/1024).toFixed(1)}MB - Tumia <3MB au 0:05 sec`; selectedFile=null; selectedData=null; return; }
+    let reader=new FileReader();
+    reader.onload=ev=>{selectedData=ev.target.result; prev.textContent=`✅ Video tayari: ${(selectedFile.size/1024/1024).toFixed(1)}MB - Ita-cheza!`;};
+    reader.readAsDataURL(selectedFile);
+  }
+});
+function showStatus(m){let s=document.getElementById('status');s.textContent=m;s.style.display='block';setTimeout(()=>s.style.display='none',4000)}
+function setFilter(f,btn){currentFilter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderPosts()}
+
+async function createPost(){
+  let t=document.getElementById('postText').value.trim();
+  if(!t && !selectedData){showStatus("Andika kitu au chagua file!");return;}
+  let btn=document.getElementById('postBtn'); btn.disabled=true; btn.textContent="⏳ Inatuma...";
+  try{
+    let id=Date.now();
+    let p={id:id, text:t, media:selectedData||null, mediaType:selectedType||null, time:new Date().toLocaleString('sw-TZ'), likes:0, comments:[], author:"PAUL 92KG"};
+    posts.unshift(p); await dbSave(p); renderPosts();
+    await dbCloud.collection('posts').doc(String(p.id)).set(p);
+    await dbRealtime.ref('posts/'+p.id).set(p);
+    showStatus("✅ Imetumwa! Video/Picha itacheza sasa!");
+    document.getElementById('postText').value=""; selectedFile=null; selectedData=null; selectedType=null; document.getElementById('fileInput').value=""; document.getElementById('preview').textContent="";
+  }catch(e){console.error(e);showStatus("❌ Error: "+e.message.substring(0,80));}
+  finally{btn.disabled=false;btn.textContent="📤 Tuma Post";}
+}
+function deletePost(id){if(!confirm("Futa?"))return;posts=posts.filter(p=>p.id!==id);dbDel(id);renderPosts();try{dbCloud.collection('posts').doc(String(id)).delete();dbRealtime.ref('posts/'+id).remove();}catch(e){}showStatus("🗑️ Imefutwa");}
+function likePost(id){let p=posts.find(x=>x.id===id);if(!p)return;p.likes=(p.likes||0)+1;dbSave(p);renderPosts();try{dbCloud.collection('posts').doc(String(id)).update({likes:p.likes});}catch(e){}}
+function addComment(id){let inp=document.getElementById('c-'+id);if(!inp)return;let txt=inp.value.trim();if(!txt)return;let p=posts.find(x=>x.id===id);if(!p)return;if(!p.comments)p.comments=[];p.comments.push({text:txt,time:new Date().toLocaleString('sw-TZ')});dbSave(p);renderPosts();try{dbCloud.collection('posts').doc(String(id)).update({comments:p.comments});}catch(e){}}
+function shareWhatsApp(id){let p=posts.find(x=>x.id===id);if(!p)return;let msg=encodeURIComponent("🏗️ MUST 92KG - RAMANI ZA KISASA:\n\n"+p.text+"\n\nApp: https://paul-gram200.github.io/Paul-app/");window.open("https://wa.me/?text="+msg,"_blank");}
+function renderPosts(){
+  let q=document.getElementById('searchInput').value.toLowerCase();
+  let cont=document.getElementById('postsContainer');cont.innerHTML="";
+  let filtered=posts.filter(p=>{let ms=!q||p.text.toLowerCase().includes(q);let mf=currentFilter==='all'||p.text.toLowerCase().includes(currentFilter);return ms&&mf;});
+  if(filtered.length===0){cont.innerHTML="<div class='card' style='text-align:center;color:#777'>Hakuna posts - Tuma ya kwanza!</div>";return;}
+  filtered.forEach(p=>{
+    let d=document.createElement('div');d.className='card';
+    let mediaHtml="";if(p.media){if(p.mediaType==='video'||p.media.startsWith('data:video'))mediaHtml=`<video src="${p.media}" controls playsinline preload="metadata" class="post-img" style="background:#000"></video>`;else mediaHtml=`<img src="${p.media}" class="post-img" loading="lazy">`;}
+    let commentsHtml="";if(p.comments&&p.comments.length){commentsHtml="<div style='background:#111;border-radius:8px;padding:8px;margin-top:8px'>";p.comments.forEach(c=>{commentsHtml+=`<div style='font-size:12px;padding:4px 0;border-bottom:1px solid #222'>💬 ${c.text} <span style='color:#777;font-size:10px'>${c.time}</span></div>`});commentsHtml+="</div>";}
+    d.innerHTML=`<div style="font-weight:bold">PAUL 92KG <span style="font-size:10px;background:#0f0;color:#000;padding:2px 6px;border-radius:10px">V7 LITE</span></div><div style="margin:8px 0;white-space:pre-wrap">${p.text||''}</div>${mediaHtml}<div class="meta"><span>🕒 ${p.time}</span><span>❤️ ${p.likes||0}</span></div><div class="actions"><button class="abtn" onclick="likePost(${p.id})">❤️ Like</button><button class="abtn" onclick="shareWhatsApp(${p.id})">🟢 WhatsApp</button><button class="abtn" style="background:#400" onclick="deletePost(${p.id})">🗑️ Delete</button></div><div style="display:flex;gap:6px;margin-top:8px"><input id="c-${p.id}" placeholder="Comment..."><button class="abtn" onclick="addComment(${p.id})">Tuma</button></div>${commentsHtml}`;
+    cont.appendChild(d);
+  });
+}
+async function loadFromCloud(){
+  showStatus("☁️ Inapakua...");
+  try{let snap=await dbCloud.collection('posts').orderBy('id','desc').limit(100).get();let cp=[];snap.forEach(d=>cp.push(d.data()));for(let x of cp){if(!posts.find(p=>p.id===x.id)){posts.push(x);await dbSave(x);}}posts.sort((a,b)=>b.id-a.id);renderPosts();showStatus(`✅ ${cp.length} kutoka Cloud`);}catch(e){showStatus("❌ Cloud error")}
+}
+(async()=>{await dbOpen();posts=await dbLoad();posts.sort((a,b)=>b.id-a.id);renderPosts();showStatus("✅ V7 LITE Tayari - 100% FREE - Video inacheza!");setTimeout(loadFromCloud,1500);if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js');})();
+</script>
+</body>
+</html>
