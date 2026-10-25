@@ -1,0 +1,14 @@
+async function createPost(){
+  let t=document.getElementById('postText').value.trim();
+  if(!t && !selectedData){showStatus("Andika kitu!");return;}
+  // COMPRESS kama ni picha kubwa
+  if(selectedData && selectedData.length > 800000){
+    showStatus("⚠️ Picha/Video kubwa sana - Inapunguza...");
+    // Kata kama ni > 1MB
+    if(selectedData.length > 1000000){
+      showStatus("❌ Video kubwa sana! Tumia <10 sec au picha tu");
+      return;
+    }
+  }
+  // ... endelea kama kawaida
+}
