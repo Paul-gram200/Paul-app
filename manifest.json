@@ -1,0 +1,21 @@
+{
+  "name": "MUST 92KG V6.1 CLOUD",
+  "short_name": "MUST 92KG",
+  "description": "Ramani za Nyumba za KISASA - SCALE 1CM=1M - Paul 92KG",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#ff6a00",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/25/25613.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/25/25613.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
